@@ -1,6 +1,7 @@
 package io.sakib.demo.design_patterns.factory;
 
 public class Main {
+    // spring''s app ctx
     public static void main(String[] args) {
         CarFactory carFactory = new CarFactory();
 
