@@ -15,6 +15,7 @@ import java.util.Map;
 public class LiteSpringApplication {
 
     private static final Map<String, Object> beanFactory = new HashMap<>();
+    private static final int TOMCAT_PORT = 8080;
 
     public static void run(Class<?> appClass) throws Exception {
         PackageScan packageScan = appClass.getAnnotation(PackageScan.class);
@@ -35,7 +36,11 @@ public class LiteSpringApplication {
 
         createBeans(classes);
         dependencyInjection(classes);
+
+        TomCatConfig.initTomcat(TOMCAT_PORT);
+        registerServlet(classes);
     }
+
 
     public static void createBeans(List<Class<?>> classes) throws Exception {
         for (Class<?> clz : classes) {
@@ -47,6 +52,16 @@ public class LiteSpringApplication {
         }
         for (var bean : beanFactory.entrySet()) {
             System.out.println("bean.getKey() = " + bean.getKey());
+        }
+    }
+
+    private static void registerServlet(List<Class<?>> classes) {
+        for (Class<?> clz : classes) {
+            if (clz.isAnnotationPresent(Servlet.class)) {
+                Servlet servlet = clz.getAnnotation(Servlet.class);
+                Object instance = beanFactory.get(getBeanName(clz));
+                TomCatConfig.registerServlet(instance, clz.getSimpleName(), servlet.urlMapping());
+            }
         }
     }
 
@@ -68,6 +83,7 @@ public class LiteSpringApplication {
             }
         }
     }
+
 
     public static String getBeanName(Class<?> clz) {
         String[] parts = clz.getName().split("\\.");
