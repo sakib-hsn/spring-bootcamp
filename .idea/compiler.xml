@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="LiteSpring4" />
+        <module name="LiteSpring3" />
+        <module name="LiteSpring2A" />
+        <module name="LiteSpring2B" />
+        <module name="LiteSpring1" />
+      </profile>
+    </annotationProcessing>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="LiteSpring1" options="-parameters" />
+      <module name="LiteSpring2B" options="-parameters" />
+    </option>
+  </component>
+</project>
