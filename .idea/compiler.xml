@@ -9,11 +9,15 @@
         <outputRelativeToContentRoot value="true" />
         <module name="LiteSpring4" />
         <module name="LiteSpring3" />
+        <module name="LiteSpring4B" />
         <module name="LiteSpring2A" />
         <module name="LiteSpring2B" />
         <module name="LiteSpring1" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="SpringSession4B" target="11" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
