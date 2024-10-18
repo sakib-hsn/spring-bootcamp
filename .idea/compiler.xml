@@ -10,6 +10,7 @@
         <module name="LiteSpring4" />
         <module name="LiteSpring3" />
         <module name="LiteSpring4B" />
+        <module name="SpringSession5B" />
         <module name="LiteSpring2A" />
         <module name="SpringSession5A" />
         <module name="LiteSpring2B" />
@@ -24,6 +25,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="LiteSpring1" options="-parameters" />
       <module name="LiteSpring2B" options="-parameters" />
+      <module name="SpringSession5B" options="-parameters" />
     </option>
   </component>
 </project>
