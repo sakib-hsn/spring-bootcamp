@@ -11,6 +11,7 @@
         <module name="LiteSpring3" />
         <module name="LiteSpring4B" />
         <module name="LiteSpring2A" />
+        <module name="SpringSession5A" />
         <module name="LiteSpring2B" />
         <module name="LiteSpring1" />
       </profile>
