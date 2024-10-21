@@ -1,6 +1,8 @@
 package com.codemaster.io.config;
 
+import com.codemaster.io.JwtManagementFilter;
 import com.codemaster.io.handler.CustomAccessDeniedHandler;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -12,6 +14,7 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -21,6 +24,9 @@ import java.util.List;
 @EnableWebSecurity(debug = true)
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true) // Enable method-level security
 public class SecurityConfig {
+
+    @Autowired
+    JwtManagementFilter jwtManagementFilter;
 
     @Bean
     public UserDetailsService userDetailsService() {
@@ -62,6 +68,8 @@ public class SecurityConfig {
                 .anyRequest().authenticated();
 
         http.csrf().disable();
+
+        http.addFilterBefore(jwtManagementFilter, UsernamePasswordAuthenticationFilter.class);
 
         http.exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler());
 
