@@ -1,9 +1,6 @@
 package com.codemaster.io.config;
 
-import com.codemaster.io.handler.CustomAccessDeniedHandler;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -15,7 +12,6 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
 import java.util.List;
 
 
@@ -23,6 +19,7 @@ import java.util.List;
 @EnableWebSecurity(debug = true)
 //@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true) // Enable method-level security
 public class SecurityConfig {
+
     @Bean
     public UserDetailsService userDetailsService() {
         User admin = new User("admin", "1234",
@@ -41,5 +38,14 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return NoOpPasswordEncoder.getInstance();
+    }
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
+        http.authorizeHttpRequests()
+                .anyRequest().permitAll();
+
+        return http.build();
     }
 }
