@@ -1,6 +1,5 @@
 package com.codemaster.io.controller;
 
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,7 +15,19 @@ public class HomeController {
 
     @GetMapping("/")
     public String home(Principal principal, Model model) {
-        if(principal != null) model.addAttribute("username", principal.getName());
+        if (principal != null) {
+            model.addAttribute("username", principal.getName());
+        }
+//        etao kora jay
+//        get from context Thread local
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+//        if (authentication != null) {
+//            System.out.println("authentication.getPrincipal() = " + authentication.getPrincipal());
+//            for (GrantedAuthority authority : authentication.getAuthorities()) {
+//                System.out.println("authority.getAuthority() = " + authority.getAuthority());
+//            }
+//        }
         return "index"; // This will point to index.html
     }
 
@@ -28,8 +39,9 @@ public class HomeController {
     }
 
     @GetMapping("/admin")
-//    @PreAuthorize("hasRole('ADMIN')")
-    @Secured("ROLE_ADMIN")
+    @PreAuthorize("hasRole('ADMIN')")
+    // secured dile ROLE_ dite hoy
+//    @Secured("ROLE_ADMIN")
     public String admin(Principal principal, Model model) {
         model.addAttribute("username", principal.getName());
         return "admin";
@@ -43,10 +55,10 @@ public class HomeController {
     }
 
     @DeleteMapping("/file/{id}")
-    @ResponseBody
     @PreAuthorize("hasRole('ADMIN') and hasAuthority('ADMIN:ALL_PERMISSION')")
+    @ResponseBody // to convert RESTApi
     public String fileDelete(@PathVariable String id) {
-        System.out.println("File DeleteRequest landed " + id );
+        System.out.println("File DeleteRequest landed " + id);
         return "Success";
     }
 
