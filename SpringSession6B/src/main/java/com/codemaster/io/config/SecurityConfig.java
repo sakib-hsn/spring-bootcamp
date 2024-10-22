@@ -32,6 +32,7 @@ public class SecurityConfig {
     public UserDetailsService userDetailsService() {
 
         User user = new User("user", "1234",
+                // Arrays.asList(new SimpleGrantedAuthority("ROLE_USER")
                 List.of(new SimpleGrantedAuthority("ROLE_USER")));
 
 
