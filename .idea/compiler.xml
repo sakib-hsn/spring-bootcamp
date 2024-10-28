@@ -9,11 +9,15 @@
         <outputRelativeToContentRoot value="true" />
         <module name="LiteSpring4" />
         <module name="LiteSpring3" />
+        <module name="SpringSession6" />
         <module name="LiteSpring4B" />
         <module name="SpringSession5B" />
         <module name="LiteSpring2A" />
         <module name="SpringSession5A" />
+        <module name="SpringSession7C" />
         <module name="LiteSpring2B" />
+        <module name="SpringSession6A" />
+        <module name="SpringSession7A" />
         <module name="LiteSpring1" />
       </profile>
     </annotationProcessing>
@@ -26,6 +30,10 @@
       <module name="LiteSpring1" options="-parameters" />
       <module name="LiteSpring2B" options="-parameters" />
       <module name="SpringSession5B" options="-parameters" />
+      <module name="SpringSession6" options="-parameters" />
+      <module name="SpringSession6A" options="-parameters" />
+      <module name="SpringSession7A" options="-parameters" />
+      <module name="SpringSession7C" options="-parameters" />
     </option>
   </component>
 </project>
