@@ -6,7 +6,7 @@ import { useAuth } from '@/contexts/AuthContext'
 import { Button } from '@/components/Button'
 import { Input } from '@/components/Input'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {faGithub, faGoogle} from '@fortawesome/free-brands-svg-icons';
+import {faGithub, faGoogle, faFacebook} from '@fortawesome/free-brands-svg-icons';
 
 export default function SignIn() {
     const [email, setEmail] = useState('')
@@ -169,7 +169,44 @@ export default function SignIn() {
         window.addEventListener("message", githubMessageListener);
     };
 
+    const handleFacebookSignIn = () => {
+        const facebookAuthURL = "https://www.facebook.com/v21.0/dialog/oauth";
+        const redirectURI = "http://localhost:4444/auth/facebook/callback"; // Update as needed
+        const clientID = "1061679962355699"; // Replace with your Facebook App ID
+        const responseType = "code";
+        const scope = "email public_profile"; // Scope can be customized
 
+        // Generate a random state parameter for security (useful for CSRF protection)
+        const state = generateNonce(); // Ensure you have a generateNonce() function
+
+        const authURL = `${facebookAuthURL}?client_id=${clientID}&redirect_uri=${redirectURI}&response_type=${responseType}&scope=${scope}&state=${state}`;
+
+        console.log("authUrl", authURL);
+
+        // Open a new popup window for Facebook Sign-In
+        const popup = window.open(authURL, "facebookLogin", "width=500,height=600");
+
+        // Listen for the redirect URL in the popup
+        const facebookMessageListener = async (event) => {
+            if (event.origin !== window.location.origin) return; // Ensure it's from the same origin
+
+            const { code } = event.data; // Assuming the callback sends { code }
+
+            if (code) {
+                console.log("Facebook Code: ", code);
+
+                // Call a function to handle the OAuth code exchange
+                const success = await loginWithOAuth(code, 'Facebook', 'code');
+                if (success) {
+                    window.removeEventListener("message", facebookMessageListener);
+                    router.push('/dashboard');
+                }
+            }
+        };
+
+        // Attach the listener
+        window.addEventListener("message", facebookMessageListener);
+    };
 
     return (
         <div className="flex h-screen items-center justify-center bg-gray-50">
@@ -204,6 +241,11 @@ export default function SignIn() {
                     <Button type="button" className="w-full mt-4" onClick={handleGitHubSignIn} variant={"outline"}>
                         <FontAwesomeIcon icon={faGithub} className="mr-2" />
                         Sign In with Github
+                    </Button>
+
+                    <Button type="button" className="w-full mt-4" onClick={handleFacebookSignIn} variant={"outline"}>
+                        <FontAwesomeIcon icon={faFacebook} className="mr-2" />
+                        Sign In with Facebook
                     </Button>
                 </form>
             </div>
