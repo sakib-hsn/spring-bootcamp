@@ -2,6 +2,7 @@ package com.codemaster.io.provider;
 
 import com.codemaster.io.models.Role;
 import com.codemaster.io.models.User;
+import com.codemaster.io.service.FacebookAPIService;
 import com.codemaster.io.service.GithubAPIService;
 import com.codemaster.io.service.GoogleAPIService;
 import com.codemaster.io.service.UserService;
@@ -26,6 +27,9 @@ public class CustomOAuthProvider implements AuthenticationProvider {
     @Autowired
     private GithubAPIService githubAPIService;
 
+    @Autowired
+    private FacebookAPIService facebookAPIService;
+
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         System.out.println("CustomOAuth Authentication Provider");
@@ -38,6 +42,8 @@ public class CustomOAuthProvider implements AuthenticationProvider {
                 user = googleAPIService.getUserFrom(oAuthToken.getAuthToken());
             } else if (oAuthToken.getTokenProvider().equals("Github")) {
                 user = githubAPIService.getUserFrom(oAuthToken.getAuthToken());
+            } else if (oAuthToken.getTokenProvider().equals("Facebook")) {
+                user = facebookAPIService.getUserFrom(oAuthToken.getAuthToken());
             }
 
             if (user == null) {
