@@ -1,5 +1,6 @@
 package com.codemaster.io;
 
+import javax.sql.DataSource;
 import java.sql.*;
 
 public class Main {
@@ -36,37 +37,54 @@ public class Main {
         return false;
     }
 
-    public static void insertUserAndAuditData(User user) throws SQLException {
-        String insertUserQuery = "insert into users (name, email, age, country) values (?, ?, ?, ?)";
-        PreparedStatement preparedStatement = ConnectionManager.getConnection().prepareStatement(insertUserQuery);
+    public static void insertUserAndAuditData(User user) {
+        try {
+            DataSource dataSource = ConnectionManager.getDataSource();
+            Connection connection = dataSource.getConnection();
 
-        preparedStatement.setString(1, user.getName());
-        preparedStatement.setString(2, user.getEmail());
-        preparedStatement.setInt(3, user.getAge());
-        preparedStatement.setString(4, user.getCountry());
+            try {
 
-        int cnt = preparedStatement.executeUpdate();
-        if (cnt > 0) {
-            System.out.println("User inserted");
-        }
+                connection.setAutoCommit(false);
 
-        String auditQuery = "insert into audit (user_name, operation_type, timestamp) values (?, ?, ?)";
+                String insertUserQuery = "insert into users (name, email, age, country) values (?, ?, ?, ?)";
+                PreparedStatement preparedStatement = connection.prepareStatement(insertUserQuery);
 
-        preparedStatement = ConnectionManager.getConnection().prepareStatement(auditQuery);
-        preparedStatement.setString(1, user.getEmail());
-        preparedStatement.setString(2, "INSERT");
-        preparedStatement.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
+                preparedStatement.setString(1, user.getName());
+                preparedStatement.setString(2, user.getEmail());
+                preparedStatement.setInt(3, user.getAge());
+                preparedStatement.setString(4, user.getCountry());
 
-        cnt = preparedStatement.executeUpdate();
-        if (cnt > 0) {
-            System.out.println("Audit inserted");
+                int cnt = preparedStatement.executeUpdate();
+                if (cnt > 0) {
+                    System.out.println("User inserted");
+                }
+
+                String auditQuery = "insert into audit (user_name, operation_type, timestamp) values (?, ?, ?)";
+
+                preparedStatement = connection.prepareStatement(auditQuery);
+                preparedStatement.setString(1, user.getName());
+                preparedStatement.setString(2, "INSERT");
+                preparedStatement.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
+
+                cnt = preparedStatement.executeUpdate();
+                if (cnt > 0) {
+                    System.out.println("Audit inserted");
+                }
+
+                connection.commit();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+                connection.rollback();
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
     }
 
     public static void main(String[] args) throws SQLException {
         User user = User.builder()
-                .name("user11")
-                .email("user11@gmail.comfdsfsadfasdfasdfsadfadfasfra")
+                .name("user16")
+                .email("user16@gmail.com")
                 .age(32)
                 .country("BD")
                 .build();
