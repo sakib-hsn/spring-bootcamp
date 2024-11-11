@@ -3,7 +3,7 @@ package com.codemaster.io;
 import javax.sql.DataSource;
 import java.sql.*;
 
-public class Main {
+public class JDBCMain {
 
     public static boolean loginByPlainStatement(String email, String password) throws SQLException {
         String sqlQuery = "select * from email_password where email = '"
@@ -83,8 +83,8 @@ public class Main {
 
     public static void main(String[] args) throws SQLException {
         User user = User.builder()
-                .name("user16")
-                .email("user16@gmail.com")
+                .name("user17")
+                .email("user17@gmail.com")
                 .age(32)
                 .country("BD")
                 .build();
