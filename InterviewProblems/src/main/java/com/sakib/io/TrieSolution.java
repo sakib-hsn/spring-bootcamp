@@ -24,6 +24,7 @@ public class TrieSolution {
         if (pos == word.length()) {
             curNode.setWord(word);
             curNode.setFrequency(frequency);
+            insertTop10(curNode, curNode);
             return curNode;
         }
 
