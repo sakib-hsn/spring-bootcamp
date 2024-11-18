@@ -1,5 +1,6 @@
 package com.sakib.io;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,8 +17,7 @@ public class TrieNode {
     @Override
     public String toString() {
         return "TrieNode{" +
-                "word='" + word + '\'' +
-                ", frequency=" + frequency +
+                "children=" + children.keySet() +
                 '}';
     }
 
@@ -51,5 +51,16 @@ public class TrieNode {
 
     public void setTop10(List<TrieNode> top10) {
         this.top10 = top10;
+    }
+
+    public void addTop10Node(TrieNode top10Node) {
+        if (this.top10 == null) {
+            this.top10 = new ArrayList<>();
+        }
+        this.top10.add(top10Node);
+    }
+
+    public void removeTop10Node(TrieNode node) {
+        this.top10.remove(node);
     }
 }
