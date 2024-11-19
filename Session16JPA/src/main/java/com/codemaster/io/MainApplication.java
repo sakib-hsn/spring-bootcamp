@@ -1,16 +1,20 @@
 package com.codemaster.io;
 
+import java.lang.reflect.Proxy;
+
 public class MainApplication {
     public static void main(String[] args) {
-        RealCar realCar = new RealCar();
+        Car realCar = new RealCar();
 
-        CarManager carManager = new CarManager();
-        Car proxyCar = new ProxyCar(realCar);
+        // Interface Car
+        // Object realCar
+        // ClassLoader Car
 
-        carManager.addCar(proxyCar);
+        Car proxy = (Car) Proxy.newProxyInstance(Car.class.getClassLoader(),
+                new Class<?>[]{Car.class}, new LogAdder(realCar));
 
-        proxyCar.startEngine();
-        proxyCar.stopEngine();
-
+        proxy.startEngine();
+        proxy.stopEngine();
+        proxy.makeSound();
     }
 }
