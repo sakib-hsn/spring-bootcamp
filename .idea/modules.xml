@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/SpringSession6B/SpringSession6B.iml" filepath="$PROJECT_DIR$/SpringSession6B/SpringSession6B.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/litespring.iml" filepath="$PROJECT_DIR$/.idea/litespring.iml" />
     </modules>
   </component>
