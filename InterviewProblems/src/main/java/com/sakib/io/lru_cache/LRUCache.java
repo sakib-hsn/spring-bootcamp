@@ -1,7 +1,10 @@
 package com.sakib.io.lru_cache;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 public class LRUCache {
     public int capacity;
@@ -12,9 +15,9 @@ public class LRUCache {
 
     MinHeap heap;
 
-    private KVNode head;
+    private final KVNode head;
 
-    private KVNode tail;
+    private final KVNode tail;
 
     public LRUCache(int capacity, int ttl) {
         this.capacity = capacity;
@@ -29,7 +32,8 @@ public class LRUCache {
         head.prev = tail;
     }
 
-    public void remove(KVNode kvNode) {
+
+    public void removeFromList(KVNode kvNode) {
         kvNode.prev.next = kvNode.next;
         kvNode.next.prev = kvNode.prev;
     }
@@ -47,9 +51,20 @@ public class LRUCache {
     }
 
     public void removeExpired(long currentTime) {
-        while (!heap.heap.isEmpty() && currentTime - heap.get(0).timestamp > ttl) {
+        System.out.println("removeExpired called");
+//        System.out.println("currentTime = " + currentTime);
+//        if (heap.heap.isEmpty()) {
+//            System.out.println("heap is empty");
+//        } else {
+//            System.out.println("heap.get(0).timestamp = " + heap.get(0).timestamp);
+//            System.out.println("(currentTime - heap.get(0).timestamp) = " + (currentTime - heap.get(0).timestamp) / 1000);
+//        }
+        while (!heap.heap.isEmpty() && currentTime - heap.get(0).timestamp > ttl * 1000L) {
             String key = heap.get(0).key;
-            heap.remove(map.get(key).heapIndex);
+            System.out.println("removing: " + key);
+            KVNode kvNode = map.get(key).kvNode;
+            removeFromList(kvNode);
+            removeFromHeap(kvNode);
             map.remove(key);
         }
     }
@@ -62,12 +77,12 @@ public class LRUCache {
         if (map.containsKey(key)) {
             KVNode keyNode = map.get(key).kvNode;
             keyNode.value = value;
-            remove(keyNode);
+            removeFromList(keyNode);
             moveToFront(keyNode);
         } else {
             if (map.size() >= capacity) {
                 KVNode kvNode = tail.next;
-                remove(kvNode);
+                removeFromList(kvNode);
                 removeFromHeap(kvNode);
                 map.remove(kvNode.key);
             }
@@ -89,25 +104,63 @@ public class LRUCache {
         }
 
         KVNode kvNode = map.get(key).kvNode;
-        remove(kvNode);
+        removeFromList(kvNode);
         moveToFront(kvNode);
 
         return kvNode.value;
     }
 
     public static void main(String[] args) {
-        LRUCache lruCache = new LRUCache(2, 2);
+        LRUCache lruCache = new LRUCache(2, 10);
+//        lruCache.put("1", "1", 1);
+//        lruCache.put("2", "2", 2);
+//        lruCache.removeExpired(4);
+//        String value = lruCache.get("1");
+//        System.out.println("value = " + value);
+//        lruCache.put("3", "3", 3);
+//        lruCache.removeExpired(5);
+//        value = lruCache.get("2");
+//        System.out.println("value = " + value);
+//        value = lruCache.get("3");
+//        System.out.println("value = " + value);
 
-        lruCache.put("1", "1", 1);
-        lruCache.put("2", "2", 2);
-        lruCache.removeExpired(4);
-        String value = lruCache.get("1");
-        System.out.println("value = " + value);
-        lruCache.put("3", "3", 3);
-        lruCache.removeExpired(5);
-        value = lruCache.get("2");
-        System.out.println("value = " + value);
-        value = lruCache.get("3");
-        System.out.println("value = " + value);
+        Thread thread = new Thread(() -> {
+            SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
+            while (true) {
+                System.out.println("Current Time: " + formatter.format(new Date()));
+                lruCache.removeExpired(System.currentTimeMillis());
+                try {
+                    Thread.sleep(lruCache.ttl * 1000L); // Sleep for ttl second
+                } catch (InterruptedException e) {
+                    System.out.println("Time thread interrupted!");
+                    break;
+                }
+            }
+        });
+
+        thread.start();
+
+        while (true) {
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("Enter choice: ");
+            System.out.println("1. put");
+            System.out.println("2. get");
+            int coice = scanner.nextInt();
+            System.out.println("Enter key: ");
+            String key = scanner.next();
+            String value;
+            switch (coice) {
+                case 1:
+                    System.out.println("Enter value: ");
+                    value = scanner.next();
+                    lruCache.put(key, value, System.currentTimeMillis());
+                    break;
+                case 2:
+                    value = lruCache.get(key);
+                    System.out.println("value = " + value);
+            }
+        }
+
+//        thread.interrupt();
     }
 }
