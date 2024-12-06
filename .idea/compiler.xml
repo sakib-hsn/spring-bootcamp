@@ -22,6 +22,7 @@
         <module name="LiteSpring4B" />
         <module name="LiteSpring2A" />
         <module name="LiteSpring2B" />
+        <module name="Session19A" />
         <module name="Session16JPA" />
       </profile>
     </annotationProcessing>
@@ -36,6 +37,7 @@
       <module name="LiteSpring2B" options="-parameters" />
       <module name="Session14JDBC1" options="-parameters" />
       <module name="Session16JPA" options="-parameters" />
+      <module name="Session19A" options="-parameters" />
       <module name="SpringSession5B" options="-parameters" />
       <module name="SpringSession6" options="-parameters" />
       <module name="SpringSession6A" options="-parameters" />
