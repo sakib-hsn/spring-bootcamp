@@ -23,6 +23,7 @@
         <option value="$PROJECT_DIR$/Session16JPA/pom.xml" />
         <option value="$PROJECT_DIR$/Session19A/pom.xml" />
         <option value="$PROJECT_DIR$/Session22ADynamoDB/pom.xml" />
+        <option value="$PROJECT_DIR$/Session23ElasticSearch/pom.xml" />
       </list>
     </option>
   </component>
